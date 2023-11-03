@@ -589,7 +589,7 @@ ifeq ($(SETUP), sedov)
 #   Sedov blast wave test
     PERIODIC=yes
     SETUPFILE= setup_sedov.f90
-    IND_TIMESTEPS=yes
+    IND_TIMESTEPS=no
     KNOWN_SETUP=yes
     MAXP=2100000
 endif
