@@ -853,13 +853,14 @@ pure subroutine set_incline_or_warp(xyzh,vxyzu,npart_tot,npart_start,posangl,inc
     R = sqrt(dot_product(xyzh(1:3,i),xyzh(1:3,i)))
     if (R < Rwarp-Hwarp) then
        inc = 0.
-    elseif (R < Rwarp+Hwarp) then
+    elseif (R < Rwarp+ 3.* Hwarp) then
+       !write(*,*) "########### NEW TILT ###########"
        inc = asin(0.5*(1.+sin(pi/(2.*Hwarp)*(R-Rwarp)))*sin(incl))
-!       inc = incl*(0.5*tanh((R-Rwarp)/1.) +0.5)
+       !inc = incl*(0.5*tanh((R-Rwarp)/1.) +0.5)
        psi = pi*Rwarp/(4.*Hwarp)*sin(incl)/sqrt(1. - (0.5*sin(incl))**2)
        psimax = max(psimax,psi)
     else
-       inc = incl
+       inc = 0.
     endif
     !--rotate position and velocity
     call rotatevec(xyzh(1:3,i),k,inc)
