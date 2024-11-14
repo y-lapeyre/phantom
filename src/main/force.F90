@@ -1699,9 +1699,9 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
 
           if (maxvxyzu >= 4) then
              !--viscous heating
-             fsum(idudtdissi) = fsum(idudtdissi) + dudtdissi + dudtresist
+             fsum(idudtdissi) = 0.
              !--energy dissipation due to conductivity
-             fsum(idendtdissi) = fsum(idendtdissi) + dendissterm
+             fsum(idendtdissi) = 0.
           endif
 
           !--add contribution to particle i's force
