@@ -1647,9 +1647,9 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
              !
              ! dB/dt evolution equation
              !
-             dBevolx = dBrhoterm*dvx + dBdissterm*dBx - dpsiterm*runix - dBnonideal(1)
-             dBevoly = dBrhoterm*dvy + dBdissterm*dBy - dpsiterm*runiy - dBnonideal(2)
-             dBevolz = dBrhoterm*dvz + dBdissterm*dBz - dpsiterm*runiz - dBnonideal(3)
+             dBevolx = dBrhoterm*dvx
+             dBevoly = dBrhoterm*dvy
+             dBevolz = dBrhoterm*dvz
           endif
           !
           !--get projection of anisotropic part of stress tensor
