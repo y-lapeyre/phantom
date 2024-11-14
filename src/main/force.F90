@@ -1572,10 +1572,9 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
           endif
           !--energy conservation from artificial viscosity
           if (ien_type == ien_etotal) then ! total energy
-             dudtdissi = - pmassj*((pro2i + qrho2i)*projvj*grkerni + &
-                                   (pro2j + qrho2j)*projvi*grkernj)
+             dudtdissi = 0.
           else
-             dudtdissi = pmassj*qrho2i*projv*grkerni
+             dudtdissi = 0.
           endif
 !--DISC_VISCOSITY--
 #endif
@@ -1601,7 +1600,7 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
                 rhoav1 = 2./(rhoi + rhoj)
                 vsigu = sqrt(abs(pri - prj)*rhoav1)
              endif
-             dendissterm = vsigu*denij*(auterm*grkerni + autermj*grkernj)
+             dendissterm = 0.
           endif
 
           if (mhd) then
@@ -1609,10 +1608,10 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
              ! artificial resistivity
              !
              vsigB = sqrt((dvx - projv*runix)**2 + (dvy - projv*runiy)**2 + (dvz - projv*runiz)**2)
-             dBdissterm = (avBterm*grkerni + avBtermj*grkernj)*vsigB
+             dBdissterm = 0.
 
              !--energy dissipation due to artificial resistivity
-             if (useresistiveheat) dudtresist = -0.5*dB2*dBdissterm
+             if (useresistiveheat) dudtresist = 0.
 
              pmjrho21grkerni = pmassj*rho21i*grkerni
              pmjrho21grkernj = pmassj*rho21j*grkernj
