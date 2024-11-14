@@ -1582,7 +1582,7 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
 !------------------
 
           !--add av term to pressure
-          gradpi = pmassj*(pro2i + qrho2i)*grkerni
+          gradpi = pmassj*(pro2i)*grkerni
           if (usej) gradpj = pmassj*(pro2j + qrho2j)*grkernj
 
           !--artificial thermal conductivity (need j term)
@@ -2033,12 +2033,6 @@ subroutine get_stress(pri,spsoundi,rhoi,rho1i,xi,yi,zi, &
        strain = strain_from_dvdx(dvdx)
        !--get stress (multiply by coefficient for use in second derivative)
        term = -shearvisc*pmassi*rho1i  ! shearvisc = eta/rho, so this is eta/rho**2
-       sxxi = term*strain(1)
-       sxyi = term*strain(2)
-       sxzi = term*strain(3)
-       syyi = term*strain(4)
-       syzi = term*strain(5)
-       szzi = term*strain(6)
        stressiso = (2./3.*shearvisc - bulkvisc)*divvi*rho1i + stressmax
     else
        graddivvcoeff = 0.5*(bulkvisc*rhoi + etavisc/3.)   ! 0.5 here is because we
@@ -2063,16 +2057,16 @@ subroutine get_stress(pri,spsoundi,rhoi,rho1i,xi,yi,zi, &
     vwavei    = sqrt(spsoundi*spsoundi + valfven2i)
 
     !--MHD terms in stress tensor
-    sxxi  = sxxi - pmassi*Brhoxi*Brhoxi
-    sxyi  = sxyi - pmassi*Brhoxi*Brhoyi
-    sxzi  = sxzi - pmassi*Brhoxi*Brhozi
-    syyi  = syyi - pmassi*Brhoyi*Brhoyi
-    syzi  = syzi - pmassi*Brhoyi*Brhozi
-    szzi  = szzi - pmassi*Brhozi*Brhozi
+    sxxi  = pmassi*Brhoxi*Brhoxi
+    sxyi  = pmassi*Brhoxi*Brhoyi
+    sxzi  = pmassi*Brhoxi*Brhozi
+    syyi  = pmassi*Brhoyi*Brhoyi
+    syzi  = pmassi*Brhoyi*Brhozi
+    szzi  = pmassi*Brhozi*Brhozi
 !
 !--construct total isotropic pressure term (gas + magnetic + stress)
 !
-    pro2i = (pri + radPi)*rho1i*rho1i + stressiso + 0.5*Bro2i
+    pro2i = (pri)*rho1i*rho1i + 0.5*Bro2i
 
  else
 !
