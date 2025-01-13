@@ -1582,7 +1582,7 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
 !------------------
 
           !--add av term to pressure
-          gradpi = pmassj*(pro2i + qrho2i)*grkerni
+          gradpi = pmassj*pro2i*grkerni ! @@@ remove pi shock term 
           if (usej) gradpj = pmassj*(pro2j + qrho2j)*grkernj
 
           !--artificial thermal conductivity (need j term)
@@ -1647,9 +1647,9 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
              !
              ! dB/dt evolution equation
              !
-             dBevolx = dBrhoterm*dvx + dBdissterm*dBx - dpsiterm*runix - dBnonideal(1)
-             dBevoly = dBrhoterm*dvy + dBdissterm*dBy - dpsiterm*runiy - dBnonideal(2)
-             dBevolz = dBrhoterm*dvz + dBdissterm*dBz - dpsiterm*runiz - dBnonideal(3)
+             dBevolx = dBrhoterm*dvx ! @@@ removed psi, Ddiss (art visco for amg lines) and non ideal mhd
+             dBevoly = dBrhoterm*dvy ! @@@ removed psi, Ddiss (art visco for amg lines) and non ideal mhd
+             dBevolz = dBrhoterm*dvz ! @@@ removed psi, Ddiss (art visco for amg lines) and non ideal mhd
           endif
           !
           !--get projection of anisotropic part of stress tensor
@@ -1699,9 +1699,9 @@ subroutine compute_forces(i,iamgasi,iamdusti,xpartveci,hi,hi1,hi21,hi41,gradhi,g
 
           if (maxvxyzu >= 4) then
              !--viscous heating
-             fsum(idudtdissi) = fsum(idudtdissi) + dudtdissi + dudtresist
+             fsum(idudtdissi) = fsum(idudtdissi) + dudtdissi ! @@@ remove lambda artres
              !--energy dissipation due to conductivity
-             fsum(idendtdissi) = fsum(idendtdissi) + dendissterm
+             fsum(idendtdissi) = 0 ! @@@ remove shock term
           endif
 
           !--add contribution to particle i's force
@@ -2996,7 +2996,7 @@ subroutine finish_cell_and_store_results(icall,cell,fxyzu,xyzh,vxyzu,poten,dt,dv
              psii = xpartveci(ipsi)
 
              ! new cleaning evolving d/dt (psi/c_h)
-             dBevol(4,i) = -vcleani*fsum(idivBdiffi)*rho1i - psii*dtau - 0.5*psii*divvi
+             dBevol(4,i) = 0.
 
              dtclean   = C_cour*hi/(vcleani + tiny(0.))
           endif
@@ -3138,7 +3138,7 @@ subroutine finish_cell_and_store_results(icall,cell,fxyzu,xyzh,vxyzu,poten,dt,dv
 
 #ifdef IND_TIMESTEPS
     !-- The new timestep for particle i
-    dtitmp = min(dtf,dtcool,dtclean,dtvisci,dtdrag,dtohmi,dthalli,dtambii,dtdusti,dtradi)
+    dtitmp = min(dtf,dtcool,dtvisci,dtdrag,dtohmi,dthalli,dtambii,dtdusti,dtradi) ! @@@ remove dtclean
 
     if (dtitmp < dti + tiny(dtitmp) .and. dtitmp < dtmax) then
        dti     = dtitmp
